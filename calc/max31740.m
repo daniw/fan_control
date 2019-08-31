@@ -14,8 +14,8 @@ temp_max = 40;
 % Other parameters
 %r_1 = 10e3;
 % E series for component selection
-series_r = 'E24'
-series_c = 'E6'
+series_r = 'E24';
+series_c = 'E6';
 
 %% Read external data
 % NTC data
@@ -47,7 +47,7 @@ r_slope_e = e_series(r_slope, series_r);
 f1_e = 10.5455e-6 / c_f1_e;
 f2_e = 10.5455e-6 / (c_f1_e + c_f2_e);
 temp_start_e = interp1(ntc_data_r, ntc_data_temp, r_st_e, 'pchip');
-av_e = (25e3 / r_slope_e) + 1
+av_e = (25e3 / r_slope_e) + 1;
 du_ntc_max_e = 0.5 / av_e;
 r_ntc_max_e = r_st_e * ((0.5 - du_ntc_max_e) / (0.5 + du_ntc_max_e));
 temp_max_e = interp1(ntc_data_r, ntc_data_temp, r_ntc_max_e, 'pchip');

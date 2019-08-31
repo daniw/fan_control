@@ -94,7 +94,7 @@ function result = e_series(value, series, dir)
                         dir = 'nearest';
                 end
             else
-                dir = 'nearest'
+                dir = 'nearest';
             end
             % Select value from E series
             rounded = interp1(e_series, e_series, remainder, dir);
