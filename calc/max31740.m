@@ -96,3 +96,15 @@ disp(['Low switching frequency:  ' num2str(f2_e) 'Hz']);
 disp(['High switching frequency: ' num2str(f1_e/1000) 'kHz']);
 disp(['Starting temperature:     ' num2str(temp_start_e) '°C']);
 disp(['Max speed temperature:    ' num2str(temp_max_e) '°C']);
+
+%% Plot duty as function of temperature
+t = floor(temp_start_e)-2:0.01:ceil(temp_max_e)+2;
+ntc = interp1(ntc_data_temp, ntc_data_r, t, 'pchip');
+duty = 200 * (0.5 - ntc ./ (ntc + r_st_e)) * ((25e3 / r_slope_e) + 1);
+duty(t < temp_start_e) = 0;
+duty(t > temp_max_e) = 100;
+plot(t, duty, 'r', 'LineWidth', 2);
+grid on; grid minor;
+title('PWM duty cycle over temperature');
+xlabel('Temperature [^\circ C]');
+ylabel('PWM duty cycle [%]');
