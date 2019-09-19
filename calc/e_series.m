@@ -1,3 +1,45 @@
+%% e_series
+% Select component value from e series
+% 
+%% Syntax
+% 
+%  result = e_series_divider(value)
+%  result = e_series_divider(value, series)
+%  result = e_series_divider(value, series, dir)
+% 
+%% Description
+% 
+% e_series selects the value of a component from an e-series
+% 
+%% Parameters
+%
+% * value: Exact component value to convert
+% * series: (default: 'e24') E-series to choose component value from
+% * dir: (default: 'nearest') Direction to be used for rounding of component value
+% 
+%% Return values
+%
+% * result: Rounded component value
+%
+%% Examples
+% 
+%  e_series_divider(2.5e3)
+%  ans = 
+%          2400
+%
+%  e_series_divider(2.5e3, 'e12')
+%  ans = 
+%          2700
+%
+%  e_series_divider(2.5e3, 'e12', down)
+%  ans = 
+%          2200
+%
+%% Author
+% daniw
+%
+% daniel.winz.amz@gmail.com
+
 % =============================================================================
 %> @brief Selects a component value from the e series
 %> 
@@ -8,6 +50,7 @@
 % =============================================================================
 function result = e_series(value, series, dir)
     % E series values
+    e1   = [1.0 10.0];
     e3   = [1.0 2.2 4.7 10.0];
     e6   = [1.0 1.5 2.2 3.3 4.7 6.8 10.0];
     e12  = [1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2 ...
@@ -53,34 +96,32 @@ function result = e_series(value, series, dir)
         elseif value < 0
             error('First parameter must be positive');
         else
-            % Calculate decade
-            exponent = floor(log10(value));
-            % Calculate remainder
-            remainder = value ./ (10.^exponent);
             % Select E series
             if nargin == 1
-                e_series = e24;
+                e_serie = e24;
             else
                 switch series
+                    case {1, '1', 'E1', 'e1'}
+                        e_serie = e1;
                     case {3, '3', 'E3', 'e3'}
-                        e_series = e3;
+                        e_serie = e3;
                     case {6, '6', 'E6', 'e6'}
-                        e_series = e6;
+                        e_serie = e6;
                     case {12, '12', 'E12', 'e12'}
-                        e_series = e12;
+                        e_serie = e12;
                     case {24, '24', 'E24', 'e24'}
-                        e_series = e24;
+                        e_serie = e24;
                     case {48, '48', 'E48', 'e48'}
-                        e_series = e48;
+                        e_serie = e48;
                     case {96, '96', 'E96', 'e96'}
-                        e_series = e96;
+                        e_serie = e96;
                     case {192, '192', 'E192', 'e192'}
-                        e_series = e192;
+                        e_serie = e192;
                     otherwise
                         error(['unknown E series "' num2str(series) '" selected']);
                 end
             end
-            % Direction
+            % Rounding Direction
             if nargin >=3
                 switch dir
                     case {'nearest', 'Nearest', 'n', 'N'}
@@ -96,8 +137,12 @@ function result = e_series(value, series, dir)
             else
                 dir = 'nearest';
             end
+            % Calculate decade
+            exponent = floor(log10(value));
+            % Calculate remainder
+            remainder = value ./ (10.^exponent);
             % Select value from E series
-            rounded = interp1(e_series, e_series, remainder, dir);
+            rounded = interp1(e_serie, e_serie, remainder, dir);
             % Calculate component value
             result = rounded .* 10.^exponent;
         end
