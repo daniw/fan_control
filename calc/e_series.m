@@ -95,6 +95,8 @@ function result = e_series(value, series, dir)
             result = 0;
         elseif value < 0
             error('First parameter must be positive');
+        elseif value == inf
+            result = inf;
         else
             % Select E series
             if nargin == 1
