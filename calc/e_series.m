@@ -147,6 +147,8 @@ function result = e_series(value, series, dir)
             rounded = interp1(e_serie, e_serie, remainder, dir);
             % Calculate component value
             result = rounded .* 10.^exponent;
+            % Restore infinite values
+            result(value==inf) = inf;
         end
     else
         error('First parameter needs to be a number');
